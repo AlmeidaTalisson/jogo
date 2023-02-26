@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Jogo de Adivinhação</title>
+    <style>
+      body {
+        background-color: #1c2237;
+        color: #fff;
+      }
+      h1, h2, p {
+    color: #fff;
+  }
+  
+  button {
+    background-color: #1d9ced;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #147cb3;
+  }
+  
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  li {
+    margin-bottom: 5px;
+  }
+  
+  #tempo {
+    margin-top: 10px;
+  }
+</style>
+</head>
+<body>
+  <h1>Jogo de Adivinhação</h1>
+  <p>Você tem que adivinhar um número de 1 a 100. Quantas tentativas serão necessárias?</p>
+  <button onclick="jogar()">Jogar</button>
+  <script>
+    var intervaloMin = parseInt(prompt("Digite o valor mínimo do intervalo:"));
+    var intervaloMax = parseInt(prompt("Digite o valor máximo do intervalo:"));
+    var maxTentativas = Math.ceil(Math.log2(intervaloMax - intervaloMin + 1));
+  
+    function gerarNumeroAleatorio() {
+      return Math.floor(Math.random() * (intervaloMax - intervaloMin + 1)) + intervaloMin;
+    }
+  
+    function pedirNumero() {
+      return parseInt(prompt("Digite um número de " + intervaloMin + " a " + intervaloMax + ":"));
+    }
+  
+    function jogar() {
+      var numeroAleatorio = gerarNumeroAleatorio();
+      var numeroTentativas = 0;
+      var numeroJogador = 0;
+      var tempoInicial = Date.now();
+      var historico = document.getElementById("historico");
+      historico.innerHTML = "";
+  
+      while (numeroJogador !== numeroAleatorio) {
+            numeroTentativas++;
+            numeroJogador = pedirNumero();
+            historico.innerHTML += "<li>Tentativa " + numeroTentativas + ": " + numeroJogador + "</li>";
+      
+            if (numeroJogador > numeroAleatorio) {
+              alert("O número é menor.");
+            } else if (numeroJogador < numeroAleatorio) {
+              alert("O número é maior.");
+            }
+      
+            var tentativasRestantes = 10 - numeroTentativas;
+            if (tentativasRestantes === 0) {
+              alert("Suas tentativas acabaram. O número era " + numeroAleatorio + ".");
+              return;
+            } else {
+              alert("Você tem mais " + tentativasRestantes + " tentativa(s).");
+            }
+          }
+      
+          var tempoFinal = Date.now();
+          var tempoTotal = (tempoFinal - tempoInicial) / 1000;
+          var mensagemVitoria = "Parabéns! Você acertou o número em " + numeroTentativas + " tentativas e em " + tempoTotal + " segundos.";
+          
+          if (tempoTotal <= 10 && numeroTentativas <= 10) {
+            alert(mensagemVitoria + " Você é um mestre!");
+          } else if (tempoTotal <= 20 && numeroTentativas <= 20) {
+            alert(mensagemVitoria + " Você é muito bom!");
+          } else if (tempoTotal <= 30 && numeroTentativas <= 30) {
+            alert(mensagemVitoria + " Você é bom!");
+          } else {
+            alert(mensagemVitoria + " Você pode fazer melhor.");
+          }
+        }
+      </script>
+      
+      <h2>Histórico de tentativas:</h2>
+      <ul id="historico"></ul>
+    </body>
+    </html>      
